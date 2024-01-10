@@ -1,0 +1,12 @@
+{
+  "version": 3,
+  "file": "sidebar.css",
+  "sources": [
+    "sidebar.svelte"
+  ],
+  "sourcesContent": [
+    "<script lang=\"ts\">\"use strict\";\nlet mermaidChartHtml;\nlet todos = [];\nlet text = '';\n// Listen for messages from the webview\nwindow.addEventListener('message', event => {\n    const message = event.data; // The JSON data our extension sent\n    switch (message.command) {\n        case 'render':\n            // Update your component's state with the new HTML\n            mermaidChartHtml = message.content;\n            break;\n    }\n});\n</script>\r\n\r\n<style>\r\n.complete {\r\n    text-decoration: line-through;\r\n}\r\n\r\n.image {\r\n    padding-top: 10px;\r\n    padding-bottom: 10px;\r\n}\r\n</style>\r\n\r\n<form on:submit|preventDefault={()=>{\r\n    todos =[{ text, completed:false}, ...todos];\r\n    text =\"\"\r\n    }}>\r\n    <input bind:value={text}/>\r\n</form>\r\n\r\n<ul>\r\n    {#each todos as todo (todo.text)}\r\n    <!-- svelte-ignore a11y-click-events-have-key-events -->\r\n    <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->\r\n    <li class:complete={todo.completed} on:click={()=>{\r\n        todo.completed = !todo.completed\r\n        }}>{todo.text}</li>\r\n    {/each}\r\n</ul>\r\n\r\n<div class=\"image\">\r\n    <!-- Add id to image -->\r\n    <!-- svelte-ignore a11y-img-redundant-alt -->\r\n    <img id=\"image\"\r\n        src=\r\n        \"https://media.geeksforgeeks.org/wp-content/uploads/20210915115837/gfg3.png\"\r\n        alt=\"GFG image\" />\r\n</div>\r\n\r\n<button on:click={()=>{\r\n    tsvscode.postMessage({\r\n    type: \"onInfo\",\r\n    value: \"info message\"\r\n    })\r\n    }}>Click for Log</button>\r\n\r\n<button on:click={()=>{\r\n    tsvscode.postMessage({\r\n    type: \"onFileSearch\",\r\n    value: \"package.json\"\r\n    })\r\n    }}>Click to open a file</button>\r\n\r\n<button on:click={() => {\r\n  tsvscode.postMessage({ type: 'onMermaid', value: \"working\" })\r\n}}>Render Mermaid Chart</button>\r\n\r\n\r\n<!-- Render the received HTML -->\r\n{@html mermaidChartHtml}"
+  ],
+  "names": [],
+  "mappings": "AAiBA,uBAAU,CACN,eAAe,CAAE,YACrB,CAEA,oBAAO,CACH,WAAW,CAAE,IAAI,CACjB,cAAc,CAAE,IACpB"
+}
